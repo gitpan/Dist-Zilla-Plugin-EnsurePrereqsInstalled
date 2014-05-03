@@ -46,15 +46,16 @@ my $static_prereqs = do { my $x = {
        'configure' => {
                         'requires' => {
                                         'ExtUtils::MakeMaker' => '6.30',
-                                        'Module::Build::Tiny' => '0.035'
+                                        'Module::Build::Tiny' => '0.036'
                                       }
                       },
        'develop' => {
                       'recommends' => {
-                                        'Dist::Zilla::PluginBundle::Author::ETHER' => '0.059'
+                                        'Dist::Zilla::PluginBundle::Author::ETHER' => '0.060'
                                       },
                       'requires' => {
                                       'Dist::Zilla' => '5.015',
+                                      'Dist::Zilla::Plugin::Bootstrap::lib' => '0',
                                       'Dist::Zilla::Plugin::GitHub::Update' => '0',
                                       'Dist::Zilla::Plugin::GithubMeta' => '0',
                                       'Dist::Zilla::Plugin::MakeMaker::Fallback' => '0.008',
@@ -79,8 +80,8 @@ my $static_prereqs = do { my $x = {
                     },
        'runtime' => {
                       'requires' => {
-                                      'CPAN::Meta' => '2.120920',
                                       'CPAN::Meta::Check' => '0.007',
+                                      'CPAN::Meta::Prereqs' => '2.132830',
                                       'CPAN::Meta::Requirements' => '0',
                                       'Dist::Zilla::Role::AfterBuild' => '0',
                                       'Dist::Zilla::Role::BeforeBuild' => '0',

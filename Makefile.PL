@@ -9,7 +9,7 @@ use warnings;
 BEGIN {
 my %configure_requires = (
     'ExtUtils::MakeMaker' => '6.30',
-    'Module::Build::Tiny' => '0.035',
+    'Module::Build::Tiny' => '0.036',
 );
 
 my @missing = grep {
@@ -73,15 +73,15 @@ my %WriteMakefileArgs = (
   "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30",
-    "Module::Build::Tiny" => "0.035"
+    "Module::Build::Tiny" => "0.036"
   },
   "DISTNAME" => "Dist-Zilla-Plugin-EnsurePrereqsInstalled",
   "EXE_FILES" => [],
   "LICENSE" => "perl",
   "NAME" => "Dist::Zilla::Plugin::EnsurePrereqsInstalled",
   "PREREQ_PM" => {
-    "CPAN::Meta" => "2.120920",
     "CPAN::Meta::Check" => "0.007",
+    "CPAN::Meta::Prereqs" => "2.132830",
     "CPAN::Meta::Requirements" => 0,
     "Dist::Zilla::Role::AfterBuild" => 0,
     "Dist::Zilla::Role::BeforeBuild" => 0,
@@ -106,7 +106,7 @@ my %WriteMakefileArgs = (
     "lib" => 0,
     "version" => 0
   },
-  "VERSION" => "0.001",
+  "VERSION" => "0.002",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -114,8 +114,8 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "CPAN::Meta" => "2.120920",
   "CPAN::Meta::Check" => "0.007",
+  "CPAN::Meta::Prereqs" => "2.132830",
   "CPAN::Meta::Requirements" => 0,
   "Dist::Zilla::Role::AfterBuild" => 0,
   "Dist::Zilla::Role::BeforeBuild" => 0,

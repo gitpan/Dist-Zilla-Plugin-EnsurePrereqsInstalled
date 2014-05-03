@@ -1,7 +1,7 @@
 
 
 This archive contains the distribution Dist-Zilla-Plugin-EnsurePrereqsInstalled,
-version 0.001:
+version 0.002:
 
   Ensure at build time that all prereqs, including developer, are satisfied
 

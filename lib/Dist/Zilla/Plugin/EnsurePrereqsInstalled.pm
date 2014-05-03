@@ -4,8 +4,8 @@ package Dist::Zilla::Plugin::EnsurePrereqsInstalled;
 BEGIN {
   $Dist::Zilla::Plugin::EnsurePrereqsInstalled::AUTHORITY = 'cpan:ETHER';
 }
-# git description: 1cb3596
-$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.001';
+# git description: v0.001-3-g097c516
+$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.002';
 # ABSTRACT: Ensure at build time that all prereqs, including developer, are satisfied
 # vim: set ts=8 sw=4 tw=78 et :
 
@@ -14,7 +14,7 @@ with
     'Dist::Zilla::Role::BeforeBuild',
     'Dist::Zilla::Role::AfterBuild';
 
-use CPAN::Meta 2.120920;
+use CPAN::Meta::Prereqs 2.132830;   # for 'merged_requirements'
 use CPAN::Meta::Requirements;
 use CPAN::Meta::Check 0.007 'check_requirements';
 use namespace::autoclean;
@@ -127,15 +127,13 @@ __END__
 
 =encoding UTF-8
 
-=for :stopwords Karen Etheridge Authordeps irc
-
 =head1 NAME
 
 Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prereqs, including developer, are satisfied
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -148,6 +146,8 @@ In your F<dist.ini>:
 This is a L<Dist::Zilla> plugin that verifies, during the C<dzil build>
 process, that all required prerequisites are satisfied, including developer
 prereqs.  If any prerequisites are missing, the build is aborted.
+
+=for stopwords Authordeps
 
 Authordeps (developer prerequisites that can be extracted directly from
 F<dist.ini>) are checked at the start of the build. This would be equivalent
@@ -207,6 +207,8 @@ option for different treatment (warn? prompt?) for recommended, suggested prereq
 =back
 
 =head1 SUPPORT
+
+=for stopwords irc
 
 Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-EnsurePrereqsInstalled>
 (or L<bug-Dist-Zilla-Plugin-EnsurePrereqsInstalled@rt.cpan.org|mailto:bug-Dist-Zilla-Plugin-EnsurePrereqsInstalled@rt.cpan.org>).

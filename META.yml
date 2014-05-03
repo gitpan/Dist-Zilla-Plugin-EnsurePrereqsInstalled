@@ -17,9 +17,9 @@ build_requires:
   version: '0'
 configure_requires:
   ExtUtils::MakeMaker: '6.30'
-  Module::Build::Tiny: '0.035'
+  Module::Build::Tiny: '0.036'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.015, CPAN::Meta::Converter version 2.140640'
+generated_by: 'Dist::Zilla version 5.015, CPAN::Meta::Converter version 2.141170'
 keywords: []
 license: perl
 meta-spec:
@@ -33,10 +33,10 @@ no_index:
 provides:
   Dist::Zilla::Plugin::EnsurePrereqsInstalled:
     file: lib/Dist/Zilla/Plugin/EnsurePrereqsInstalled.pm
-    version: '0.001'
+    version: '0.002'
 requires:
-  CPAN::Meta: '2.120920'
   CPAN::Meta::Check: '0.007'
+  CPAN::Meta::Prereqs: '2.132830'
   CPAN::Meta::Requirements: '0'
   Dist::Zilla::Role::AfterBuild: '0'
   Dist::Zilla::Role::BeforeBuild: '0'
@@ -51,11 +51,21 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-EnsurePrereqsInstalled
   homepage: https://github.com/karenetheridge/Dist-Zilla-Plugin-EnsurePrereqsInstalled
   repository: https://github.com/karenetheridge/Dist-Zilla-Plugin-EnsurePrereqsInstalled.git
-version: '0.001'
+version: '0.002'
 x_Dist_Zilla:
   perl:
     version: '5.019011'
   plugins:
+    -
+      class: Dist::Zilla::Plugin::Bootstrap::lib
+      config:
+        Dist::Zilla::Role::Bootstrap:
+          distname: Dist-Zilla-Plugin-EnsurePrereqsInstalled
+          fallback: '1'
+          try_built: ~
+          try_built_method: mtime
+      name: Bootstrap::lib
+      version: '1.000001'
     -
       class: Dist::Zilla::Plugin::Git::NextVersion
       config:
@@ -67,6 +77,10 @@ x_Dist_Zilla:
           repo_root: .
       name: '@Author::ETHER/Git::NextVersion'
       version: '2.022'
+    -
+      class: Dist::Zilla::Plugin::EnsurePrereqsInstalled
+      name: '@Author::ETHER/EnsurePrereqsInstalled'
+      version: ~
     -
       class: Dist::Zilla::Plugin::PromptIfStale
       config:
@@ -304,10 +318,6 @@ x_Dist_Zilla:
               class: Pod::Weaver::Plugin::Transformer
               name: -Transformer
               version: '4.006'
-            -
-              class: Pod::Weaver::Plugin::StopWords
-              name: -StopWords
-              version: '1.008'
       name: '@Author::ETHER/PodWeaver'
       version: '4.005'
     -
@@ -407,7 +417,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::InstallGuide
       name: '@Author::ETHER/InstallGuide'
-      version: '1.200002'
+      version: '1.200003'
     -
       class: Dist::Zilla::Plugin::CheckSelfDependency
       config:
@@ -458,7 +468,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::CheckPrereqsIndexed
       name: '@Author::ETHER/CheckPrereqsIndexed'
-      version: '0.011'
+      version: '0.012'
     -
       class: Dist::Zilla::Plugin::TestRelease
       name: '@Author::ETHER/TestRelease'
@@ -510,7 +520,7 @@ x_Dist_Zilla:
         Dist::Zilla::Plugin::Git::Tag:
           branch: ~
           signed: 0
-          tag: v0.001
+          tag: v0.002
           tag_format: v%v%t
           tag_message: v%v%t
           time_zone: local
