@@ -4,19 +4,21 @@ package Dist::Zilla::Plugin::EnsurePrereqsInstalled;
 BEGIN {
   $Dist::Zilla::Plugin::EnsurePrereqsInstalled::AUTHORITY = 'cpan:ETHER';
 }
-# git description: v0.001-3-g097c516
-$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.002';
+# git description: v0.002-8-g519028e
+$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.003';
 # ABSTRACT: Ensure at build time that all prereqs, including developer, are satisfied
 # vim: set ts=8 sw=4 tw=78 et :
 
 use Moose;
 with
     'Dist::Zilla::Role::BeforeBuild',
-    'Dist::Zilla::Role::AfterBuild';
+    'Dist::Zilla::Role::AfterBuild',
+    'Dist::Zilla::Role::BeforeRelease';
 
 use CPAN::Meta::Prereqs 2.132830;   # for 'merged_requirements'
 use CPAN::Meta::Requirements;
 use CPAN::Meta::Check 0.007 'check_requirements';
+use Moose::Util::TypeConstraints;
 use namespace::autoclean;
 
 sub mvp_aliases { +{ type => 'types', relationship => 'types', relation => 'types' } }
@@ -30,7 +32,36 @@ has types => (
     handles => { types => 'elements' },
 );
 
+has build_phase => (
+    is => 'ro', isa => enum([qw(build release)]),
+    lazy => 1,
+    default => 'build',
+);
+
 sub before_build
+{
+    my $self = shift;
+
+    $self->_check_authordeps;
+}
+
+sub after_build
+{
+    my $self = shift;
+
+    return if $self->build_phase ne 'build';
+    $self->_check_prereqs;
+}
+
+sub before_release
+{
+    my $self = shift;
+
+    return if $self->build_phase ne 'release';
+    $self->_check_prereqs;
+}
+
+sub _check_authordeps
 {
     my $self = shift;
 
@@ -45,13 +76,18 @@ sub before_build
     }
 }
 
-sub after_build
+sub _check_prereqs
 {
     my $self = shift;
 
     $self->log_debug("checking that all prereqs are satisfied...");
 
-    my $prereqs_data = $self->zilla->distmeta->{prereqs};
+    my $distmeta = $self->zilla->distmeta;
+
+    $self->log('dynamic_config is set: make sure you put all possible prereqs into develop prereqs so your tests are complete!')
+        if $distmeta->{dynamic_config};
+
+    my $prereqs_data = $distmeta->{prereqs};
     my $prereqs = $self->zilla->prereqs->cpan_meta_prereqs;
 
     # returns: { module name => diagnostic, ... }
@@ -84,7 +120,7 @@ sub after_build
     }
 
 
-    if (my $x_breaks = $self->zilla->distmeta->{x_breaks})
+    if (my $x_breaks = $distmeta->{x_breaks})
     {
         $self->log_debug('checking x_breaks...');
 
@@ -133,7 +169,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -150,14 +186,20 @@ prereqs.  If any prerequisites are missing, the build is aborted.
 =for stopwords Authordeps
 
 Authordeps (developer prerequisites that can be extracted directly from
-F<dist.ini>) are checked at the start of the build. This would be equivalent
-to calling C<dzil authordeps --missing>.
+F<dist.ini>) are always checked at the start of the build. This would be
+equivalent to calling C<dzil authordeps --missing>.
 
 All prerequisites are fetched from the distribution near the end of the build
-and a final validation check is performed at that time.
+and a final validation check is performed at that time (unless C<build_phase>
+is C<release>, in which case the check is delayed until just prior to
+performing the release).
 
 Only 'requires', 'conflicts' and 'x_breaks' prerequisites are checked (by
 default); other types (e.g. 'recommends' and 'suggests' are ignored).
+
+All prerequisite phases are checked: configure, build, test, runtime, develop
+(and any custom x_ keys that may also be present, given adequate toolchain
+support).
 
 =head1 BACKGROUND
 
@@ -170,11 +212,11 @@ prerequisite that ought to have been installed first.
 It is this author's opinion that this check out to be performed by
 L<Dist::Zilla> itself, rather than leaving it to an optional plugin.
 
-=for Pod::Coverage mvp_aliases mvp_multivalue_args
+=for Pod::Coverage mvp_aliases mvp_multivalue_args before_build after_build before_release
 
 =head1 CONFIGURATION OPTIONS
 
-=head2 type
+=head2 type (or relationship)
 
     [EnsurePrereqsInstalled]
     type = requires
@@ -184,7 +226,13 @@ Indicate what type(s) of prereqs are checked (requires, recommends, suggests).
 Defaults to 'requires'; can be used more than once.  (Note that 'conflicts'
 and 'x_breaks' prereqs are always checked and this cannot be disabled.)
 
-=for Pod::Coverage before_build after_build
+=head2 build_phase
+
+    [EnsurePrereqsInstalled]
+    build_phase = release
+
+Indicates what L<Dist::Zilla> phase to perform the check at - either build
+(default) or release.
 
 =head1 POTENTIAL FEATURES
 

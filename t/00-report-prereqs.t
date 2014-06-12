@@ -45,21 +45,21 @@ my %exclude = map {; $_ => 1 } qw(
 my $static_prereqs = do { my $x = {
        'configure' => {
                         'requires' => {
-                                        'ExtUtils::MakeMaker' => '6.30',
-                                        'Module::Build::Tiny' => '0.036'
+                                        'ExtUtils::MakeMaker' => '6.30'
                                       }
                       },
        'develop' => {
                       'recommends' => {
-                                        'Dist::Zilla::PluginBundle::Author::ETHER' => '0.060'
+                                        'Dist::Zilla::PluginBundle::Author::ETHER' => '0.065'
                                       },
                       'requires' => {
-                                      'Dist::Zilla' => '5.015',
+                                      'Dist::Zilla' => '5',
                                       'Dist::Zilla::Plugin::Bootstrap::lib' => '0',
+                                      'Dist::Zilla::Plugin::DynamicPrereqs' => '0',
                                       'Dist::Zilla::Plugin::GitHub::Update' => '0',
                                       'Dist::Zilla::Plugin::GithubMeta' => '0',
-                                      'Dist::Zilla::Plugin::MakeMaker::Fallback' => '0.008',
-                                      'Dist::Zilla::Plugin::ModuleBuildTiny' => '0.004',
+                                      'Dist::Zilla::Plugin::MakeMaker' => '0',
+                                      'Dist::Zilla::Plugin::MetaResources' => '0',
                                       'Dist::Zilla::Plugin::Prereqs' => '0',
                                       'Dist::Zilla::Plugin::Test::CleanNamespaces' => '0',
                                       'Dist::Zilla::PluginBundle::Author::ETHER' => '0.057',
@@ -85,8 +85,10 @@ my $static_prereqs = do { my $x = {
                                       'CPAN::Meta::Requirements' => '0',
                                       'Dist::Zilla::Role::AfterBuild' => '0',
                                       'Dist::Zilla::Role::BeforeBuild' => '0',
+                                      'Dist::Zilla::Role::BeforeRelease' => '0',
                                       'Dist::Zilla::Util::AuthorDeps' => '0',
                                       'Moose' => '0',
+                                      'Moose::Util::TypeConstraints' => '0',
                                       'Path::Class' => '0',
                                       'namespace::autoclean' => '0',
                                       'perl' => '5.006',

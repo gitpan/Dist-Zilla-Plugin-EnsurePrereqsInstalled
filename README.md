@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 # VERSION
 
-version 0.002
+version 0.003
 
 # SYNOPSIS
 
@@ -19,14 +19,20 @@ process, that all required prerequisites are satisfied, including developer
 prereqs.  If any prerequisites are missing, the build is aborted.
 
 Authordeps (developer prerequisites that can be extracted directly from
-`dist.ini`) are checked at the start of the build. This would be equivalent
-to calling `dzil authordeps --missing`.
+`dist.ini`) are always checked at the start of the build. This would be
+equivalent to calling `dzil authordeps --missing`.
 
 All prerequisites are fetched from the distribution near the end of the build
-and a final validation check is performed at that time.
+and a final validation check is performed at that time (unless `build_phase`
+is `release`, in which case the check is delayed until just prior to
+performing the release).
 
 Only 'requires', 'conflicts' and 'x\_breaks' prerequisites are checked (by
 default); other types (e.g. 'recommends' and 'suggests' are ignored).
+
+All prerequisite phases are checked: configure, build, test, runtime, develop
+(and any custom x\_ keys that may also be present, given adequate toolchain
+support).
 
 # BACKGROUND
 
@@ -41,7 +47,7 @@ It is this author's opinion that this check out to be performed by
 
 # CONFIGURATION OPTIONS
 
-## type
+## type (or relationship)
 
     [EnsurePrereqsInstalled]
     type = requires
@@ -50,6 +56,14 @@ It is this author's opinion that this check out to be performed by
 Indicate what type(s) of prereqs are checked (requires, recommends, suggests).
 Defaults to 'requires'; can be used more than once.  (Note that 'conflicts'
 and 'x\_breaks' prereqs are always checked and this cannot be disabled.)
+
+## build\_phase
+
+    [EnsurePrereqsInstalled]
+    build_phase = release
+
+Indicates what [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) phase to perform the check at - either build
+(default) or release.
 
 # POTENTIAL FEATURES
 

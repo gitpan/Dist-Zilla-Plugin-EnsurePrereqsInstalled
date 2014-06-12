@@ -1,3 +1,4 @@
+
 use strict;
 use warnings FATAL => 'all';
 
@@ -14,7 +15,7 @@ my $tzil = Builder->from_config(
         add_files => {
             path(qw(source dist.ini)) => simple_ini(
                 [ GatherDir => ],
-                [ EnsurePrereqsInstalled => ],
+                [ EnsurePrereqsInstalled => { build_phase => 'release' } ],
                 [ Prereqs => {
                         'I::Am::Not::Installed' => 0,
                         'Test::More' => '200.0',
@@ -22,6 +23,7 @@ my $tzil = Builder->from_config(
                     },
                 ],
                 [ Prereqs => TestRecommends => { 'Something::Else' => '400.0' } ],
+                [ FakeRelease => ],
             ),
             path(qw(source lib Foo.pm)) => "package Foo;\n1;\n",
         },
@@ -30,10 +32,16 @@ my $tzil = Builder->from_config(
 
 $tzil->chrome->logger->set_debug(1);
 
-like(
+is (
     exception { $tzil->build },
+    undef,
+    'build proceeds normally',
+);
+
+like(
+    exception { $tzil->release },
     qr/^\Q[EnsurePrereqsInstalled] Unsatisfied\E/m,
-    'build aborted',
+    'release aborted',
 );
 
 cmp_deeply(
@@ -48,7 +56,7 @@ cmp_deeply(
 [EnsurePrereqsInstalled] To remedy, do:  cpanm I::Am::Not::Installed Test::More
 [EnsurePrereqsInstalled] And update your perl!",
     ),
-    'build was aborted, with remedy instructions',
+    'release was aborted, with remedy instructions',
 ) or diag 'got log messages: ', explain $tzil->log_messages;
 
 done_testing;

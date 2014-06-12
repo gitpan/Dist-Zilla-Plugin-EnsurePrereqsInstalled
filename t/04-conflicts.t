@@ -41,6 +41,6 @@ cmp_deeply(
 [EnsurePrereqsInstalled] To remedy, do:  pm-uninstall Test::More",
     ),
     'build was aborted, with remedy instructions',
-) or diag 'got: ', explain $tzil->log_messages;
+) or diag 'got log messages: ', explain $tzil->log_messages;
 
 done_testing;
