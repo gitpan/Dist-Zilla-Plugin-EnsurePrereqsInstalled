@@ -4,9 +4,10 @@ package Dist::Zilla::Plugin::EnsurePrereqsInstalled;
 BEGIN {
   $Dist::Zilla::Plugin::EnsurePrereqsInstalled::AUTHORITY = 'cpan:ETHER';
 }
-# git description: v0.002-8-g519028e
-$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.003';
+# git description: v0.003-4-ge7cf8fa
+$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.004';
 # ABSTRACT: Ensure at build time that all prereqs, including developer, are satisfied
+# KEYWORDS: plugin toolchain prerequisites dependencies modules metadata
 # vim: set ts=8 sw=4 tw=78 et :
 
 use Moose;
@@ -82,17 +83,19 @@ sub _check_prereqs
 
     $self->log_debug("checking that all prereqs are satisfied...");
 
+    # this is safe to request, since we only run this method in phases after
+    # prereqs and distmeta has been calculated
     my $distmeta = $self->zilla->distmeta;
 
     $self->log('dynamic_config is set: make sure you put all possible prereqs into develop prereqs so your tests are complete!')
         if $distmeta->{dynamic_config};
 
-    my $prereqs_data = $distmeta->{prereqs};
+    my @prereqs_relationships = keys %{$distmeta->{prereqs}};
     my $prereqs = $self->zilla->prereqs->cpan_meta_prereqs;
 
     # returns: { module name => diagnostic, ... }
     my $requires_result = check_requirements(
-        $prereqs->merged_requirements([ keys %$prereqs_data ], [ grep { $_ ne 'conflicts' } $self->types ]),
+        $prereqs->merged_requirements(\@prereqs_relationships, [ grep { $_ ne 'conflicts' } $self->types ]),
         'requires',
     );
 
@@ -107,7 +110,7 @@ sub _check_prereqs
     }
 
     my $conflicts_result = check_requirements(
-        $prereqs->merged_requirements([ keys %$prereqs_data ], ['conflicts']),
+        $prereqs->merged_requirements(\@prereqs_relationships, ['conflicts']),
         'conflicts',
     );
     if (my @conflicts = sort grep { defined $conflicts_result->{$_} } keys %$conflicts_result)
@@ -169,7 +172,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

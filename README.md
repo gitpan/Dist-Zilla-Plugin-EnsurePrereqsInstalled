@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 # VERSION
 
-version 0.003
+version 0.004
 
 # SYNOPSIS
 

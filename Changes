@@ -1,5 +1,8 @@
 Revision history for Dist-Zilla-Plugin-EnsurePrereqsInstalled
 
+0.004     2014-06-22 00:04:06Z
+          - fix tests that fail with CPAN::Meta::Check 0.009
+
 0.003     2014-06-12 20:40:33Z
           - now warning the user at build time if dynamic_config is set, as
             the prereq specification may be incomplete

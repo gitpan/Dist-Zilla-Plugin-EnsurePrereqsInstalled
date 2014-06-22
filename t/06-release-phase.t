@@ -49,12 +49,12 @@ cmp_deeply(
     superbagof(
         '[EnsurePrereqsInstalled] checking that all authordeps are satisfied...',
         '[EnsurePrereqsInstalled] checking that all prereqs are satisfied...',
-        "[EnsurePrereqsInstalled] Unsatisfied prerequisites:
+        re(qr/^\Q[EnsurePrereqsInstalled] Unsatisfied prerequisites:
 [EnsurePrereqsInstalled]     Module 'I::Am::Not::Installed' is not installed
-[EnsurePrereqsInstalled]     Installed version ($Test::More::VERSION) of Test::More is not in range \'200.0\'
-[EnsurePrereqsInstalled]     Installed version ($]) of perl is not in range \'500\'
+[EnsurePrereqsInstalled]     Installed version ($Test::More::VERSION) of Test::More is not in range '200.0'
+[EnsurePrereqsInstalled]     \E(Installed version \($]\) of perl is not in range '500'|Your Perl \($]\) is not in the range '500')\Q
 [EnsurePrereqsInstalled] To remedy, do:  cpanm I::Am::Not::Installed Test::More
-[EnsurePrereqsInstalled] And update your perl!",
+[EnsurePrereqsInstalled] And update your perl!\E$/ms),
     ),
     'release was aborted, with remedy instructions',
 ) or diag 'got log messages: ', explain $tzil->log_messages;
