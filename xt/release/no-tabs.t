@@ -8,6 +8,7 @@ use Test::NoTabs;
 
 my @files = (
     'lib/Dist/Zilla/Plugin/EnsurePrereqsInstalled.pm',
+    't/00-report-prereqs.dd',
     't/00-report-prereqs.t',
     't/01-basic.t',
     't/02-authordeps.t',

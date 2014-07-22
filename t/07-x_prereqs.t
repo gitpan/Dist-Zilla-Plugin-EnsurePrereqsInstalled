@@ -46,7 +46,7 @@ cmp_deeply(
 [EnsurePrereqsInstalled]     Module 'I::Am::Not::Installed' is not installed
 [EnsurePrereqsInstalled] To remedy, do:  cpanm I::Am::Not::Installed",
     ),
-    'build was aborted, with remedy instructions',
+    'build was aborted: custom x_* prereq phases are checked',
 ) or diag 'got log messages: ', explain $tzil->log_messages;
 
 done_testing;

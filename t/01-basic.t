@@ -36,6 +36,9 @@ like(
     'build aborted',
 );
 
+# allow for dev releases - Module::Metadata includes _, but $VERSION does not.
+my $TM_VERSION = join '_?', split //, $Test::More::VERSION;
+
 cmp_deeply(
     $tzil->log_messages,
     superbagof(
@@ -43,12 +46,12 @@ cmp_deeply(
         '[EnsurePrereqsInstalled] checking that all prereqs are satisfied...',
         re(qr/^\Q[EnsurePrereqsInstalled] Unsatisfied prerequisites:
 [EnsurePrereqsInstalled]     Module 'I::Am::Not::Installed' is not installed
-[EnsurePrereqsInstalled]     Installed version ($Test::More::VERSION) of Test::More is not in range '200.0'
+[EnsurePrereqsInstalled]     Installed version (\E$TM_VERSION\Q) of Test::More is not in range '200.0'
 [EnsurePrereqsInstalled]     \E(Installed version \($]\) of perl is not in range '500'|Your Perl \($]\) is not in the range '500')\Q
 [EnsurePrereqsInstalled] To remedy, do:  cpanm I::Am::Not::Installed Test::More
 [EnsurePrereqsInstalled] And update your perl!\E$/ms),
     ),
-    'build was aborted, with remedy instructions',
+    'build was aborted: all prerequisites were checked',
 ) or diag 'got log messages: ', explain $tzil->log_messages;
 
 done_testing;

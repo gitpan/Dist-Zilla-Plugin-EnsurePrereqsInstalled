@@ -1,0 +1,147 @@
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prereqs, including developer, are satisfied
+
+=head1 VERSION
+
+version 0.005
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+    [EnsurePrereqsInstalled]
+
+=head1 DESCRIPTION
+
+This is a L<Dist::Zilla> plugin that verifies, during the C<dzil build>
+process, that all required prerequisites are satisfied, including developer
+prereqs.  If any prerequisites are missing, the build is aborted.
+
+=for stopwords Authordeps
+
+Authordeps (developer prerequisites that can be extracted directly from
+F<dist.ini>) are always checked at the start of the build. This would be
+equivalent to calling C<dzil authordeps --missing>.
+
+All prerequisites are fetched from the distribution near the end of the build
+and a final validation check is performed at that time (unless C<build_phase>
+is C<release>, in which case the check is delayed until just prior to
+performing the release).
+
+Only 'requires', 'conflicts' and 'x_breaks' prerequisites are checked (by
+default); other types (e.g. 'recommends' and 'suggests' are ignored).
+
+All prerequisite phases are checked: configure, build, test, runtime, develop
+(and any custom x_ keys that may also be present, given adequate toolchain
+support).
+
+=head1 BACKGROUND
+
+This plugin was written for a distribution that does some fiddly work during
+file munging time that required the installation of a module, specified as an
+C<< ; authordep Module::Name >> in F<dist.ini>.  When the module is missing, an ugly exception
+is printed, without a clear explanation that this module was a developer
+prerequisite that ought to have been installed first.
+
+It is this author's opinion that this check out to be performed by
+L<Dist::Zilla> itself, rather than leaving it to an optional plugin.
+
+=for Pod::Coverage mvp_aliases mvp_multivalue_args before_build after_build before_release
+
+=head1 CONFIGURATION OPTIONS
+
+=head2 type (or relationship, prereq_type)
+
+    [EnsurePrereqsInstalled]
+    type = requires
+    type = recommends
+
+Indicate what relationship type(s) of prereqs are checked (such as requires, recommends, suggests).
+Defaults to 'requires'; can be used more than once.  (Note that 'conflicts'
+and 'x_breaks' prereqs are always checked and this cannot be disabled.)
+
+=head2 build_phase
+
+    [EnsurePrereqsInstalled]
+    build_phase = release
+
+Indicates what L<Dist::Zilla> phase to perform the check at - either build
+(default) or release.
+
+=head1 POTENTIAL FEATURES
+
+...if anyone has an interest:
+
+=over 4
+
+=item *
+
+option to exclude modules from being checked
+
+=item *
+
+option to prompt to continue instead of dying on unsatisfied prereqs
+
+=item *
+
+option for different treatment (warn? prompt?) for recommended, suggested prereqs
+
+=back
+
+=head1 SUPPORT
+
+=for stopwords irc
+
+Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-EnsurePrereqsInstalled>
+(or L<bug-Dist-Zilla-Plugin-EnsurePrereqsInstalled@rt.cpan.org|mailto:bug-Dist-Zilla-Plugin-EnsurePrereqsInstalled@rt.cpan.org>).
+I am also usually active on irc, as 'ether' at C<irc.perl.org>.
+
+=head1 SEE ALSO
+
+These plugins all do somewhat similar and overlapping things, but are all useful in their own way:
+
+=over 4
+
+=item *
+
+L<CPAN::Meta::Spec/Prereq Spec>
+
+=item *
+
+L<Dist::Zilla::Plugin::PromptIfStale>
+
+=item *
+
+L<Dist::Zilla::Plugin::CheckPrereqsIndexed>
+
+=item *
+
+L<Dist::Zilla::Plugin::Test::ReportPrereqs>
+
+=item *
+
+L<Dist::Zilla::Plugin::Test::CheckDeps>
+
+=item *
+
+L<Dist::Zilla::Plugin::Test::CheckBreaks>
+
+=back
+
+=head1 AUTHOR
+
+Karen Etheridge <ether@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Karen Etheridge.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

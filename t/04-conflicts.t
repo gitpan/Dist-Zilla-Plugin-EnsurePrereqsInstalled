@@ -31,16 +31,19 @@ like(
     'build aborted',
 );
 
+# allow for dev releases - Module::Metadata includes _, but $VERSION does not.
+my $TM_VERSION = join '_?', split //, $Test::More::VERSION;
+
 cmp_deeply(
     $tzil->log_messages,
     superbagof(
         '[EnsurePrereqsInstalled] checking that all authordeps are satisfied...',
         '[EnsurePrereqsInstalled] checking that all prereqs are satisfied...',
-        "[EnsurePrereqsInstalled] Conflicts found:
-[EnsurePrereqsInstalled]     Installed version ($Test::More::VERSION) of Test::More is in range '<= 200.0'
-[EnsurePrereqsInstalled] To remedy, do:  pm-uninstall Test::More",
+        re(qr/^\Q[EnsurePrereqsInstalled] Conflicts found:
+[EnsurePrereqsInstalled]     Installed version (\E$TM_VERSION\Q) of Test::More is in range '<= 200.0'
+[EnsurePrereqsInstalled] To remedy, do:  pm-uninstall Test::More\E$/ms),
     ),
-    'build was aborted, with remedy instructions',
+    'build was aborted: conflict prereqs were checked',
 ) or diag 'got log messages: ', explain $tzil->log_messages;
 
 done_testing;

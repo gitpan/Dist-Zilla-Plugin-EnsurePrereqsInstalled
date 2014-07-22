@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugin-EnsurePrereqsInstalled
 
+0.005     2014-07-22 15:17:05Z
+          - "types" option now also available as "prereq_types", for clarity
+          - fix test regexps that fail when Test::More is a dev release
+
 0.004     2014-06-22 00:04:06Z
           - fix tests that fail with CPAN::Meta::Check 0.009
 

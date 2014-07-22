@@ -5,16 +5,18 @@ author:
 build_requires:
   Dist::Zilla::Role::MetaProvider: '0'
   ExtUtils::MakeMaker: '0'
+  File::Spec: '0'
   File::Spec::Functions: '0'
   List::Util: '0'
   Path::Tiny: '0'
+  Scalar::Util: '0'
   Test::DZil: '0'
   Test::Deep: '0'
   Test::Fatal: '0'
   Test::More: '0'
   if: '0'
   lib: '0'
-  version: '0'
+  version: '0.77'
 configure_requires:
   ExtUtils::MakeMaker: '6.30'
   Module::Build::Tiny: '0.036'
@@ -39,7 +41,7 @@ no_index:
 provides:
   Dist::Zilla::Plugin::EnsurePrereqsInstalled:
     file: lib/Dist/Zilla/Plugin/EnsurePrereqsInstalled.pm
-    version: '0.004'
+    version: '0.005'
 requires:
   CPAN::Meta::Check: '0.007'
   CPAN::Meta::Prereqs: '2.132830'
@@ -62,7 +64,7 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-EnsurePrereqsInstalled
   homepage: https://github.com/karenetheridge/Dist-Zilla-Plugin-EnsurePrereqsInstalled
   repository: https://github.com/karenetheridge/Dist-Zilla-Plugin-EnsurePrereqsInstalled.git
-version: '0.004'
+version: '0.005'
 x_Dist_Zilla:
   perl:
     version: '5.021001'
@@ -76,7 +78,7 @@ x_Dist_Zilla:
           try_built: ~
           try_built_method: mtime
       name: Bootstrap::lib
-      version: '1.000001'
+      version: '1.000003'
     -
       class: Dist::Zilla::Plugin::Git::NextVersion
       config:
@@ -102,7 +104,7 @@ x_Dist_Zilla:
             - Dist::Zilla::PluginBundle::Author::ETHER
           phase: build
           skip: []
-      name: '@Author::ETHER/build'
+      name: '@Author::ETHER/stale modules, build'
       version: '0.023'
     -
       class: Dist::Zilla::Plugin::PromptIfStale
@@ -113,7 +115,7 @@ x_Dist_Zilla:
           modules: []
           phase: release
           skip: []
-      name: '@Author::ETHER/release'
+      name: '@Author::ETHER/stale modules, release'
       version: '0.023'
     -
       class: Dist::Zilla::Plugin::ExecDir
@@ -167,6 +169,7 @@ x_Dist_Zilla:
           destination_filename: CONTRIBUTING
           dist: Dist-Zilla-PluginBundle-Author-ETHER
           encoding: UTF-8
+          has_xs: 0
           source_filename: CONTRIBUTING
       name: '@Author::ETHER/generate CONTRIBUTING'
       version: '0.005'
@@ -241,7 +244,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Test::ReportPrereqs
       name: '@Author::ETHER/Test::ReportPrereqs'
-      version: '0.013'
+      version: '0.014'
     -
       class: Dist::Zilla::Plugin::Test::Portability
       name: '@Author::ETHER/Test::Portability'
@@ -343,7 +346,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::ReadmeAnyFromPod
       name: '@Author::ETHER/ReadmeAnyFromPod'
-      version: '0.141120'
+      version: '0.141760'
     -
       class: Dist::Zilla::Plugin::GithubMeta
       name: '@Author::ETHER/GithubMeta'
@@ -372,7 +375,7 @@ x_Dist_Zilla:
           inherit_version: '1'
           meta_noindex: '1'
       name: '@Author::ETHER/MetaProvides::Package'
-      version: '2.000001'
+      version: '2.000002'
     -
       class: Dist::Zilla::Plugin::MetaConfig
       name: '@Author::ETHER/MetaConfig'
@@ -393,14 +396,6 @@ x_Dist_Zilla:
       class: Dist::Zilla::Plugin::MinimumPerl
       name: '@Author::ETHER/MinimumPerl'
       version: '1.003'
-    -
-      class: Dist::Zilla::Plugin::Prereqs
-      config:
-        Dist::Zilla::Plugin::Prereqs:
-          phase: develop
-          type: requires
-      name: '@Author::ETHER/installer_requirements'
-      version: '5.019'
     -
       class: Dist::Zilla::Plugin::Prereqs
       config:
@@ -433,7 +428,7 @@ x_Dist_Zilla:
         Dist::Zilla::Role::TestRunner:
           default_jobs: 9
       name: '@Author::ETHER/RunExtraTests'
-      version: '0.021'
+      version: '0.022'
     -
       class: Dist::Zilla::Plugin::CheckSelfDependency
       config:
@@ -515,6 +510,10 @@ x_Dist_Zilla:
       name: '@Author::ETHER/CopyFilesFromRelease'
       version: '0.001'
     -
+      class: Dist::Zilla::Plugin::Run::AfterRelease
+      name: '@Author::ETHER/Run::AfterRelease'
+      version: '0.021'
+    -
       class: Dist::Zilla::Plugin::Git::Commit
       config:
         Dist::Zilla::Plugin::Git::Commit:
@@ -526,6 +525,7 @@ x_Dist_Zilla:
           allow_dirty:
             - Changes
             - README.md
+            - README.pod
             - LICENSE
             - CONTRIBUTING
           allow_dirty_match: []
@@ -540,7 +540,7 @@ x_Dist_Zilla:
         Dist::Zilla::Plugin::Git::Tag:
           branch: ~
           signed: 0
-          tag: v0.004
+          tag: v0.005
           tag_format: v%v%t
           tag_message: v%v%t
           time_zone: local
@@ -551,7 +551,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::GitHub::Update
       name: '@Author::ETHER/GitHub::Update'
-      version: '0.36'
+      version: '0.38'
     -
       class: Dist::Zilla::Plugin::Git::Push
       config:
@@ -568,16 +568,16 @@ x_Dist_Zilla:
       name: '@Author::ETHER/InstallRelease'
       version: '0.008'
     -
+      class: Dist::Zilla::Plugin::ConfirmRelease
+      name: '@Author::ETHER/ConfirmRelease'
+      version: '5.019'
+    -
       class: Dist::Zilla::Plugin::Prereqs
       config:
         Dist::Zilla::Plugin::Prereqs:
           phase: develop
           type: requires
-      name: '@Author::ETHER/via_options'
-      version: '5.019'
-    -
-      class: Dist::Zilla::Plugin::ConfirmRelease
-      name: '@Author::ETHER/ConfirmRelease'
+      name: '@Author::ETHER/bundle_options'
       version: '5.019'
     -
       class: Dist::Zilla::Plugin::MetaResources
@@ -602,7 +602,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Test::CleanNamespaces
       name: Test::CleanNamespaces
-      version: '0.003'
+      version: '0.004'
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':InstallModules'

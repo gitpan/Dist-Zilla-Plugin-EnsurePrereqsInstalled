@@ -64,7 +64,7 @@ EOW
         "Karen Etheridge <ether\@cpan.org>"
       ],
       "dist_name" => "Dist-Zilla-Plugin-EnsurePrereqsInstalled",
-      "dist_version" => "0.004",
+      "dist_version" => "0.005",
       "license" => "perl",
       "module_name" => "Dist::Zilla::Plugin::EnsurePrereqsInstalled",
       "recommends" => {},
@@ -90,16 +90,18 @@ EOW
       "test_requires" => {
         "Dist::Zilla::Role::MetaProvider" => 0,
         "ExtUtils::MakeMaker" => 0,
+        "File::Spec" => 0,
         "File::Spec::Functions" => 0,
         "List::Util" => 0,
         "Path::Tiny" => 0,
+        "Scalar::Util" => 0,
         "Test::DZil" => 0,
         "Test::Deep" => 0,
         "Test::Fatal" => 0,
         "Test::More" => 0,
         "if" => 0,
         "lib" => 0,
-        "version" => 0
+        "version" => "0.77"
       }
     );
 
@@ -107,16 +109,18 @@ EOW
     my %fallback_build_requires = (
       "Dist::Zilla::Role::MetaProvider" => 0,
       "ExtUtils::MakeMaker" => 0,
+      "File::Spec" => 0,
       "File::Spec::Functions" => 0,
       "List::Util" => 0,
       "Path::Tiny" => 0,
+      "Scalar::Util" => 0,
       "Test::DZil" => 0,
       "Test::Deep" => 0,
       "Test::Fatal" => 0,
       "Test::More" => 0,
       "if" => 0,
       "lib" => 0,
-      "version" => 0
+      "version" => "0.77"
     );
 
 

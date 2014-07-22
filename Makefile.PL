@@ -98,18 +98,20 @@ my %WriteMakefileArgs = (
   "TEST_REQUIRES" => {
     "Dist::Zilla::Role::MetaProvider" => 0,
     "ExtUtils::MakeMaker" => 0,
+    "File::Spec" => 0,
     "File::Spec::Functions" => 0,
     "List::Util" => 0,
     "Path::Tiny" => 0,
+    "Scalar::Util" => 0,
     "Test::DZil" => 0,
     "Test::Deep" => 0,
     "Test::Fatal" => 0,
     "Test::More" => 0,
     "if" => 0,
     "lib" => 0,
-    "version" => 0
+    "version" => "0.77"
   },
-  "VERSION" => "0.004",
+  "VERSION" => "0.005",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -127,12 +129,14 @@ my %FallbackPrereqs = (
   "Dist::Zilla::Role::MetaProvider" => 0,
   "Dist::Zilla::Util::AuthorDeps" => 0,
   "ExtUtils::MakeMaker" => 0,
+  "File::Spec" => 0,
   "File::Spec::Functions" => 0,
   "List::Util" => 0,
   "Moose" => 0,
   "Moose::Util::TypeConstraints" => 0,
   "Path::Class" => 0,
   "Path::Tiny" => 0,
+  "Scalar::Util" => 0,
   "Test::DZil" => 0,
   "Test::Deep" => 0,
   "Test::Fatal" => 0,
@@ -141,7 +145,7 @@ my %FallbackPrereqs = (
   "lib" => 0,
   "namespace::autoclean" => 0,
   "strict" => 0,
-  "version" => 0,
+  "version" => "0.77",
   "warnings" => 0
 );
 

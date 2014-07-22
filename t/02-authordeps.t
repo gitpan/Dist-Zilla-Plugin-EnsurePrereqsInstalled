@@ -40,7 +40,7 @@ foreach my $build_phase (qw(build release))
 [EnsurePrereqsInstalled] I::Am::Not::Installed
 [EnsurePrereqsInstalled] To remedy, do:  cpanm I::Am::Not::Installed',
         ),
-        $build_phase . ' was aborted, with remedy instructions',
+        $build_phase . ' was aborted: authordeps and all prerequisites were checked',
     ) or diag 'got log messages: ', explain $tzil->log_messages;
 }
 

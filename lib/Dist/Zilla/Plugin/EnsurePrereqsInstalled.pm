@@ -4,8 +4,8 @@ package Dist::Zilla::Plugin::EnsurePrereqsInstalled;
 BEGIN {
   $Dist::Zilla::Plugin::EnsurePrereqsInstalled::AUTHORITY = 'cpan:ETHER';
 }
-# git description: v0.003-4-ge7cf8fa
-$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.004';
+# git description: v0.004-7-g1409a53
+$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.005';
 # ABSTRACT: Ensure at build time that all prereqs, including developer, are satisfied
 # KEYWORDS: plugin toolchain prerequisites dependencies modules metadata
 # vim: set ts=8 sw=4 tw=78 et :
@@ -22,15 +22,21 @@ use CPAN::Meta::Check 0.007 'check_requirements';
 use Moose::Util::TypeConstraints;
 use namespace::autoclean;
 
-sub mvp_aliases { +{ type => 'types', relationship => 'types', relation => 'types' } }
-sub mvp_multivalue_args { qw(types) }
+sub mvp_aliases {
+    +{
+        type => 'prereq_types',
+        relationship => 'prereq_types',
+        relation => 'prereq_types',
+    }
+}
+sub mvp_multivalue_args { qw(prereq_types) }
 
-has types => (
+has prereq_types => (
     isa => 'ArrayRef[Str]',
     lazy => 1,
     default => sub { ['requires'] },
     traits => ['Array'],
-    handles => { types => 'elements' },
+    handles => { prereq_types => 'elements' },
 );
 
 has build_phase => (
@@ -90,12 +96,12 @@ sub _check_prereqs
     $self->log('dynamic_config is set: make sure you put all possible prereqs into develop prereqs so your tests are complete!')
         if $distmeta->{dynamic_config};
 
-    my @prereqs_relationships = keys %{$distmeta->{prereqs}};
+    my @prereq_phases = keys %{$distmeta->{prereqs}};
     my $prereqs = $self->zilla->prereqs->cpan_meta_prereqs;
 
     # returns: { module name => diagnostic, ... }
     my $requires_result = check_requirements(
-        $prereqs->merged_requirements(\@prereqs_relationships, [ grep { $_ ne 'conflicts' } $self->types ]),
+        $prereqs->merged_requirements(\@prereq_phases, [ grep { $_ ne 'conflicts' } $self->prereq_types ]),
         'requires',
     );
 
@@ -110,7 +116,7 @@ sub _check_prereqs
     }
 
     my $conflicts_result = check_requirements(
-        $prereqs->merged_requirements(\@prereqs_relationships, ['conflicts']),
+        $prereqs->merged_requirements(\@prereq_phases, ['conflicts']),
         'conflicts',
     );
     if (my @conflicts = sort grep { defined $conflicts_result->{$_} } keys %$conflicts_result)
@@ -172,7 +178,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 
@@ -219,13 +225,13 @@ L<Dist::Zilla> itself, rather than leaving it to an optional plugin.
 
 =head1 CONFIGURATION OPTIONS
 
-=head2 type (or relationship)
+=head2 type (or relationship, prereq_type)
 
     [EnsurePrereqsInstalled]
     type = requires
     type = recommends
 
-Indicate what type(s) of prereqs are checked (requires, recommends, suggests).
+Indicate what relationship type(s) of prereqs are checked (such as requires, recommends, suggests).
 Defaults to 'requires'; can be used more than once.  (Note that 'conflicts'
 and 'x_breaks' prereqs are always checked and this cannot be disabled.)
 
@@ -270,6 +276,10 @@ I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 These plugins all do somewhat similar and overlapping things, but are all useful in their own way:
 
 =over 4
+
+=item *
+
+L<CPAN::Meta::Spec/Prereq Spec>
 
 =item *
 
