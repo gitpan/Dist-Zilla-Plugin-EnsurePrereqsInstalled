@@ -38,17 +38,19 @@ like(
 # allow for dev releases - Module::Metadata includes _, but $VERSION does not.
 my $TM_VERSION = join '_?', split //, $Test::More::VERSION;
 
+my $re;
 cmp_deeply(
     $tzil->log_messages,
     superbagof(
         '[EnsurePrereqsInstalled] checking that all authordeps are satisfied...',
         '[EnsurePrereqsInstalled] checking that all prereqs are satisfied...',
         '[EnsurePrereqsInstalled] checking x_breaks...',
-        re(qr/^\Q[EnsurePrereqsInstalled] Breakages found:
+        re(do { $re = qr/^\Q[EnsurePrereqsInstalled] Breakages found:
 [EnsurePrereqsInstalled]     Installed version (\E$TM_VERSION\Q) of Test::More is in range '<= 200.0'
-[EnsurePrereqsInstalled] To remedy, do:  cpanm Test::More\E$/ms),
+[EnsurePrereqsInstalled] To remedy, do:  cpanm Test::More\E$/ms }),
     ),
     'build was aborted: x_breaks entries were checked',
-) or diag 'got log messages: ', explain $tzil->log_messages;
+) or diag 'got log messages: ', explain $tzil->log_messages,
+    'expected: ', $re;
 
 done_testing;

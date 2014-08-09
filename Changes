@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugin-EnsurePrereqsInstalled
 
+0.006     2014-08-09 03:27:46Z (TRIAL RELEASE)
+          - dump a few more diagnostics on test failure, to try to identify
+            the problem with dev releases of Test::More
+
 0.005     2014-07-22 15:17:05Z
           - "types" option now also available as "prereq_types", for clarity
           - fix test regexps that fail when Test::More is a dev release

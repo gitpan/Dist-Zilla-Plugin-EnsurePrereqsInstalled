@@ -4,8 +4,8 @@ package Dist::Zilla::Plugin::EnsurePrereqsInstalled;
 BEGIN {
   $Dist::Zilla::Plugin::EnsurePrereqsInstalled::AUTHORITY = 'cpan:ETHER';
 }
-# git description: v0.004-7-g1409a53
-$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.005';
+# git description: v0.005-3-g41edd29
+$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.006'; # TRIAL
 # ABSTRACT: Ensure at build time that all prereqs, including developer, are satisfied
 # KEYWORDS: plugin toolchain prerequisites dependencies modules metadata
 # vim: set ts=8 sw=4 tw=78 et :
@@ -44,6 +44,10 @@ has build_phase => (
     lazy => 1,
     default => 'build',
 );
+
+# there is nothing in this plugin that should affect the outcome of the build
+# -- its configuration is not significant.
+#around dump_config => sub { };
 
 sub before_build
 {
@@ -178,7 +182,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
 

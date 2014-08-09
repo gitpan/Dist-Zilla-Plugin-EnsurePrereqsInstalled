@@ -35,17 +35,19 @@ like(
 # allow for dev releases - Module::Metadata includes _, but $VERSION does not.
 my $TM_VERSION = join '_?', split //, $Test::More::VERSION;
 
+my $re;
 cmp_deeply(
     $tzil->log_messages,
     superbagof(
         '[EnsurePrereqsInstalled] checking that all authordeps are satisfied...',
         '[EnsurePrereqsInstalled] checking that all prereqs are satisfied...',
-        re(qr/^\Q[EnsurePrereqsInstalled] Unsatisfied prerequisites:
+        re(do { $re = qr/^\Q[EnsurePrereqsInstalled] Unsatisfied prerequisites:
 [EnsurePrereqsInstalled]     Module 'I::Am::Not::Installed' is not installed
 [EnsurePrereqsInstalled]     Installed version (\E$TM_VERSION\Q) of Test::More is not in range '200.0'
-[EnsurePrereqsInstalled] To remedy, do:  cpanm I::Am::Not::Installed Test::More\E$/ms),
+[EnsurePrereqsInstalled] To remedy, do:  cpanm I::Am::Not::Installed Test::More\E$/ms }),
     ),
     'build was aborted: custom relationships are checked',
-) or diag 'got log messages: ', explain $tzil->log_messages;
+) or diag 'got log messages: ', explain $tzil->log_messages,
+    'expected: ', $re;
 
 done_testing;
