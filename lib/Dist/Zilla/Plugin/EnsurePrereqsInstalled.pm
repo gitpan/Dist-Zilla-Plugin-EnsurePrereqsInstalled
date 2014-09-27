@@ -1,11 +1,8 @@
 use strict;
 use warnings;
 package Dist::Zilla::Plugin::EnsurePrereqsInstalled;
-BEGIN {
-  $Dist::Zilla::Plugin::EnsurePrereqsInstalled::AUTHORITY = 'cpan:ETHER';
-}
-# git description: v0.005-3-g41edd29
-$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.006'; # TRIAL
+# git description: v0.006-TRIAL-2-gec386c2
+$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.007';
 # ABSTRACT: Ensure at build time that all prereqs, including developer, are satisfied
 # KEYWORDS: plugin toolchain prerequisites dependencies modules metadata
 # vim: set ts=8 sw=4 tw=78 et :
@@ -182,7 +179,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 

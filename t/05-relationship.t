@@ -7,6 +7,7 @@ use Test::DZil;
 use Test::Fatal;
 use Test::Deep;
 use Path::Tiny;
+use Module::Metadata;
 
 my $tzil = Builder->from_config(
     { dist_root => 't/does-not-exist' },
@@ -33,7 +34,7 @@ like(
 );
 
 # allow for dev releases - Module::Metadata includes _, but $VERSION does not.
-my $TM_VERSION = join '_?', split //, $Test::More::VERSION;
+my $TM_VERSION = Module::Metadata->new_from_module('Test::More')->version;
 
 my $re;
 cmp_deeply(
