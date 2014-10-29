@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 package Dist::Zilla::Plugin::EnsurePrereqsInstalled;
-# git description: v0.006-TRIAL-2-gec386c2
-$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.007';
+# git description: v0.007-1-g966e8dd
+$Dist::Zilla::Plugin::EnsurePrereqsInstalled::VERSION = '0.008';
 # ABSTRACT: Ensure at build time that all prereqs, including developer, are satisfied
 # KEYWORDS: plugin toolchain prerequisites dependencies modules metadata
 # vim: set ts=8 sw=4 tw=78 et :
@@ -155,10 +155,10 @@ sub _get_authordeps
     my $self = shift;
 
     require Dist::Zilla::Util::AuthorDeps;
-    require Path::Class;
+    Dist::Zilla::Util::AuthorDeps->VERSION(5.021);
     Dist::Zilla::Util::AuthorDeps::format_author_deps(
         Dist::Zilla::Util::AuthorDeps::extract_author_deps(
-            Path::Class::dir('.'),  # ugh!
+            '.',                    # repository root
             1,                      # --missing
         ),
         (),                         # --versions
@@ -179,7 +179,7 @@ Dist::Zilla::Plugin::EnsurePrereqsInstalled - Ensure at build time that all prer
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 SYNOPSIS
 
